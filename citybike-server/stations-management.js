@@ -1,57 +1,55 @@
 // Main config for bike api fetching:
 const apiFetchInterval = 5000;
-const citybikeEndpoint = "http://api.citybik.es/v2/networks/decobike-miami-beach";
+const citybikeEndpoint = "http://api.citybik.es/v2/networks/";
 
 // Fetch utils:
 const fetch = require('node-fetch');
 
-class BikeStation {
+class BikeStationsNetwork {
 
     id = undefined;
-    stationData = {
-        free_bikes: 0
-    };
+    networkData = {};
 
-    constructor(stationId) {
-        this.id = stationId;
+    constructor(networkId) {
+        this.id = networkId;
     }
 
-    // Main listener: the one which should be called from server.js
-    listenToUpdates = (callback) => {
-        this.checkForUpdates(callback);
-        setInterval(() => { this.checkForUpdates(callback); }, apiFetchInterval)
+    fetchNetworkData = () => {
+        return new Promise((resolve, reject) => {
+            fetch(citybikeEndpoint + this.id)
+                .then(apiResponse => {
+                    if (apiResponse.status === 200) {
+                        apiResponse.json()
+                            .then(networkData => {
+                                resolve(networkData.network);
+                            })
+                            .catch(error => { console.log(error); reject(error); });
+                    }
+                    else {
+                        console.log(apiResponse.status);
+                    }
+                })
+                .catch(error => { console.log(error); reject(error); });
+        })
     }
 
-    // Auxiliar methods:
     checkForUpdates = (callback) => {
-        this.fetchStationData()
-            .then(stationData => {
-                stationData.free_bikes = this.stationData.free_bikes + 1;
-                if (JSON.stringify(stationData) !== JSON.stringify(this.stationData)) {
-                    this.stationData = stationData
-                    callback(stationData);
+        this.fetchNetworkData()
+            .then(newNetworkData => {
+                if (JSON.stringify(newNetworkData) !== JSON.stringify(this.networkData)) {
+                    callback(newNetworkData);
+                    this.networkData = newNetworkData;
                 }
             })
-            .catch(error => { console.log(error) });
+            .catch(error => { console.log(error); });
     }
 
-    fetchStationData = () => {
-        return new Promise((resolve, reject) => {
-            fetch(citybikeEndpoint)
-                .then(apiResponse => {
-                    apiResponse.json()
-                        .then(bikeNetworkData => {
-                            const networkStations = bikeNetworkData.network.stations;
-                            const myBikeStation = networkStations.find(item => item.id === this.id);
-                            resolve(myBikeStation);
-                        })
-                        .catch(error => { console.log(error); reject(error); })
-                })
-                .catch(error => { console.log(error); reject(error); })
-        });
+    listenToUpdates = (callback) => {
+        this.checkForUpdates(callback);
+        setInterval(() => { this.checkForUpdates(callback); }, apiFetchInterval);
     }
 }
 
 module.exports = {
-    BikeStation
+    BikeStationsNetwork
 }
