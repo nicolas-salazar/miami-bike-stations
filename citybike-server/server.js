@@ -1,25 +1,24 @@
+// Utils:
 const express = require("express");
-const http = require("http");
-const socketIo = require("socket.io");
-const citybikeurl = "http://api.citybik.es/v2/networks/decobike-miami-beach"
 
-const port = process.env.PORT || 4001;
-const index = require("./routes/index");
+// Server config:
 const app = express();
+const server = require('http').Server(app)
+const io = require('socket.io')(server);
 
-app.use(index);
+// Bike stations utils:
+const BikeStation = require('./stations-management').BikeStation;
 
-const server = http.createServer(app);
-const io = socketIo(server); // < Interesting!
-let interval;
+io.on('connection', (socket) => {
+  const targetStationId = socket.handshake.query.id;
+  console.log('Just received a connection on station: ' + targetStationId + ':)');
 
-io.on("connection", socket => {
-  var socketId = socket.id;
-  var clientIp = socket.request.connection.remoteAddress;
-  console.log('New connection ' + socketId + ' from ' + clientIp);
-  socket.on("disconnect", () => {
-    console.log("Client disconnected");
+  const targetStation = new BikeStation(targetStationId);
+  targetStation.listenToUpdates((data) => {
+    socket.emit('dataUpdate', { data: data });
   });
+
 });
 
+const port = process.env.PORT || 4001;
 server.listen(port, () => console.log(`Listening on port ${port}`));
