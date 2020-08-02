@@ -1,40 +1,22 @@
-import React, { Component } from "react";
-import socketIOClient from "socket.io-client";
-import { Map, TileLayer, Marker, Popup } from "react-leaflet";
+import React from 'react';
 
-class App extends Component {
-  constructor() {
-    super();
+// Custom components:
+import BikesMap from './components/BikesMap/Map';
+import SearchBox from './components/SearchBox/SearchBox';
 
-    this.state = {
-      response: false,
-      endpoint: "http://127.0.0.1:4001",
-      lat: 51.505,
-      lng: -0.09,
-      zoom: 13
-    };
+// Example data:
+import exampleNetwork from './utils/exampleData';
 
-  }
-  componentDidMount() {
-    const { endpoint } = this.state;
-    const socket = socketIOClient(endpoint);
-   
-  }
-  render() {
-    const { response } = this.state;
-    const position = [this.state.lat, this.state.lng]
-    return (
+class App extends React.Component {
 
-      <div className="map">
-        <h1> City Bikes in Miami </h1>
-        <Map center={position} zoom={this.state.zoom}>
-          <TileLayer
-            attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-        </Map>
-      </div>
-    );
-  }
+    render() {
+        return (
+            <React.Fragment>
+                <BikesMap />
+                <SearchBox stations={exampleNetwork.stations} />
+            </React.Fragment>
+        );
+    }
 }
+
 export default App;

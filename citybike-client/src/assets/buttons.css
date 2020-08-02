@@ -1,0 +1,23 @@
+.pushable-button{
+    cursor: pointer;
+}
+
+.pushable-button:hover{
+    background-color: #E0EAFF;
+    border-radius: 2px;
+    padding: 2px;
+    transform: scale(1.25);
+}
+
+.pushable-button:active{
+    transform: scale(1.25);
+    transform: translateY(2px);
+}
+
+.clickeable-item{
+    cursor: pointer;
+}
+
+.clickeable-item:hover{
+    background-color: #F0F0F0;
+}

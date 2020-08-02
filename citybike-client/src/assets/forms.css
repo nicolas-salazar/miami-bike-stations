@@ -1,0 +1,14 @@
+.form-control{
+    color: black;
+    border: unset !important;
+}
+
+.form-control::placeholder { 
+    color: #C0C0C0;
+    opacity: 1;
+}
+
+.form-control:focus{
+    border-color: unset !important;
+    box-shadow: unset !important;
+}
