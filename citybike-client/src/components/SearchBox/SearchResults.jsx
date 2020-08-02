@@ -19,6 +19,7 @@ export const SearchResults = (props) => {
                     return (
                         <SearchResult
                             filter={props.filter}
+                            focusOnStation={props.focusOnStation}
                             item={item}
                             key={'searchItem.' + item.id} />
                     );
@@ -34,7 +35,10 @@ export const SearchResults = (props) => {
 
 export const SearchResult = (props) => {
     return (
-        <div className='clickeable-item' style={{ ...SearchResultContainer }}>
+        <div
+            className='clickeable-item'
+            onClick={() => { props.focusOnStation(props.item); }}
+            style={{ ...SearchResultContainer }}>
             <div style={{ ...iconContainerStyle }}>
                 {(props.item.free_bikes > 0) ?
                     <GrBike style={{ ...iconStyle, opacity: 0.5, marginBottom: 2.5 }} /> :

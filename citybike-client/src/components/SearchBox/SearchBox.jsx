@@ -35,7 +35,7 @@ class SearchBox extends React.Component {
                         </div>
 
                         <SearchInput
-                            onBlur={() => { console.log("E"); this.setState({ dropdownIsOpen: false }); }}
+                            onBlur={() => { setTimeout(() => { this.setState({ dropdownIsOpen: false }); }, 100); }}
                             onChange={(value) => { this.setState({ activeFilter: value, dropdownIsOpen: true }); }}
                             onFocus={() => { this.setState({ dropdownIsOpen: true }); }}
                             style={{ ...inputStyle }}
@@ -51,7 +51,12 @@ class SearchBox extends React.Component {
                     </div>
 
                     <PerfectScrollbar style={{ ...resultsContainer, display: ((this.state.activeFilter !== '' && this.state.dropdownIsOpen) ? 'flex' : 'none') }}>
-                        {(this.state.activeFilter !== '' && this.state.dropdownIsOpen) ? <SearchResults filter={this.state.activeFilter} items={this.props.stations} /> : <React.Fragment />}
+                        {(this.state.activeFilter !== '' && this.state.dropdownIsOpen) ?
+                            <SearchResults
+                                filter={this.state.activeFilter}
+                                focusOnStation={this.props.focusOnStation}
+                                items={this.props.stations} /> :
+                            <React.Fragment />}
                     </PerfectScrollbar>
                 </Card>
             </div>

@@ -9,19 +9,15 @@ class BikesMap extends React.Component {
     constructor() {
         super();
 
-        this.state = {
-            lat: 25.790654,
-            lng: -80.1300455,
-            zoom: 11
-        }
+        this.state = {}
     }
 
     render() {
         return (
             <Map
-                center={[this.state.lat, this.state.lng]}
+                center={this.props.center}
                 className='main-container'
-                zoom={this.state.zoom}>
+                zoom={this.props.zoom}>
                 <TileLayer
                     attribution={MapConfig.attribution}
                     url={MapConfig.tileLayerUrl}
