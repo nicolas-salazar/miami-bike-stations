@@ -19,74 +19,127 @@ class Station extends React.Component {
     constructor() {
         super();
 
-        this.state = {};
+        this.state = {
+            stationRecords: [],
+        };
     }
 
     render() {
-        const iconMarkup = renderToStaticMarkup(<i className='fa fa-bicycle fa-2x' style={{ color: this.getColorBasedOnAvailability() }} />);
-        const customMarkerIcon = divIcon({ html: iconMarkup, className: 'marker-on-divicon' });
+        if (this.state.stationRecords.length > 0) {
 
-        return (
-            <Marker
-                icon={customMarkerIcon}
-                position={{ lat: this.props.item.latitude, lng: this.props.item.longitude }}
-            >
-                <Popup>
-                    <span
-                        className='text small' style={{ textDecoration: 'underline' }}
-                        dangerouslySetInnerHTML={{ __html: '<b>' + this.props.item.extra.address + '</b> says:' }} />
+            const item = this.getLastRecord();
 
-                    <p
-                        className='text small'
-                        dangerouslySetInnerHTML={{ __html: this.getMessageBasedOnAvailability() }}
-                        style={{ ...availabilityText, marginTop: 5, marginLeft: 10 }} />
+            if (item) {
+                const iconMarkup = renderToStaticMarkup(<i className='fa fa-bicycle fa-2x' style={{ color: this.getColorBasedOnAvailability(item) }} />);
+                const customMarkerIcon = divIcon({ html: iconMarkup, className: 'marker-on-divicon' });
 
-                    <span
-                        className='muted-text small'
-                        dangerouslySetInnerHTML={{ __html: 'Last update: <b>Today, ' + this.getTimeStamp() + '</b>' }} />
+                return (
+                    <Marker
+                        icon={customMarkerIcon}
+                        position={{ lat: item.latitude, lng: item.longitude }}
+                    >
+                        <Popup>
+                            <span
+                                className='text small' style={{ textDecoration: 'underline' }}
+                                dangerouslySetInnerHTML={{ __html: '<b>' + item.extra.address + '</b> says:' }} />
 
-                </Popup>
-            </Marker>
-        );
+                            <p
+                                className='text small'
+                                dangerouslySetInnerHTML={{ __html: this.getMessageBasedOnAvailability(item) }}
+                                style={{ ...availabilityText, marginTop: 5, marginLeft: 10 }} />
+
+                            <span
+                                className='muted-text small'
+                                dangerouslySetInnerHTML={{ __html: 'Last update: <b>Today, ' + this.getTimeStamp(item) + '</b>' }} />
+
+                        </Popup>
+                    </Marker>
+                );
+            }
+
+            else { return (<React.Fragment />); }
+        }
+        else { return (<React.Fragment />); }
     }
 
-    getColorBasedOnAvailability = () => {
-        if (this.props.item.free_bikes === 0) {
+    componentDidMount() {
+        this.setState({
+            stationRecords: [
+                {
+                    ...this.props.item,
+                    fetchDate: this.props.lastFetch,
+                }
+            ]
+        });
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (JSON.stringify(prevProps.item) !== JSON.stringify(this.props.item)) {
+            let stationRecords = [...this.state.stationRecords];
+
+            stationRecords.push({
+                ...this.props.item,
+                fetchDate: this.props.lastFetch,
+            });
+
+            this.setState({ stationRecords: stationRecords });
+        }
+    }
+
+    // Operative functions:
+    getLastRecord = () => {
+        let targetItem = undefined;
+        let records = [...this.state.stationRecords];
+
+        if (this.props.showBefore) {
+            records = records.filter(item => item.fetchDate <= this.props.showBefore);
+        }
+
+        if (records.length > 0) {
+            records = records.sort((a, b) => (a.fetchDate < b.fetchDate) ? 1 : -1);
+            return records[0];
+        }
+
+        return targetItem;
+    }
+
+    // Rendering functions:
+    getColorBasedOnAvailability = (item) => {
+        if (item.free_bikes === 0) {
             return 'red';
         }
 
-        if (this.props.item.free_bikes < 5) {
+        if (item.free_bikes < 5) {
             return 'orange';
         }
 
         return 'green';
     }
 
-    getMessageBasedOnAvailability = () => {
-        if (this.props.item.free_bikes === 0) {
+    getMessageBasedOnAvailability = (item) => {
+        if (item.free_bikes === 0) {
             return '<b>No more bikes</b> available. We are so sorry 🤧';
         }
 
-        if (this.props.item.free_bikes < 5) {
+        if (item.free_bikes < 5) {
             let message = getRandomItem(notManyBikesMessages);
-            message = message.replace('@total', this.props.item.free_bikes);
-            if (this.props.item.free_bikes === 1) { message = message.replace('bikes', 'bike'); };
+            message = message.replace('@total', item.free_bikes);
+            if (item.free_bikes === 1) { message = message.replace('bikes', 'bike'); };
 
             return message;
         }
 
-        if (this.props.item.free_bikes === 5) {
-            let message = getRandomItem(enoughBikesMessages);
-            return message.replace('@total', this.props.item.free_bikes);
+        if (item.free_bikes === 5) {
+            let message = getRandomItem(fiveBikesMessages);
+            return message.replace('@total', item.free_bikes);
         }
 
-
-        let message = getRandomItem(fiveBikesMessages);
-        return message.replace('@total', this.props.item.free_bikes);
+        let message = getRandomItem(enoughBikesMessages);
+        return message.replace('@total', item.free_bikes);
     }
 
-    getTimeStamp = () => {
-        const date = new Date(this.props.item.timestamp);
+    getTimeStamp = (item) => {
+        const date = new Date(item.timestamp);
         return date.getHours() + ':' + date.getMinutes();
     }
 }

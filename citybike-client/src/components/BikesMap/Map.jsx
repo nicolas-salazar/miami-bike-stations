@@ -32,11 +32,21 @@ class BikesMap extends React.Component {
 
                 {
                     this.props.stations.map((station, i) => {
-                        return (
-                            <Station
-                                item={station}
-                                key={"stationMarker." + station.id} />
-                        );
+                        if (i < 5) {
+                            return (
+                                <Station
+                                    item={station}
+                                    key={"stationMarker." + station.id}
+                                    lastFetch={this.props.lastFetch}
+                                    showBefore={this.props.showBefore} />
+                            );
+                        }
+                        else {
+                            return (
+                                <React.Fragment
+                                    key={"stationMarker." + i} />
+                            );
+                        }
                     })
                 }
             </Map>
