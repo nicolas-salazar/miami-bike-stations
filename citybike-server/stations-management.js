@@ -1,5 +1,5 @@
 // Main config for bike api fetching:
-const apiFetchInterval = 15000;
+const apiFetchInterval = 5000;
 const citybikeEndpoint = "http://api.citybik.es/v2/networks/";
 
 // Fetch utils:
@@ -39,7 +39,7 @@ class BikeStationsNetwork {
             .then(newNetworkData => {
                 
                 let updatedData = { ...newNetworkData };
-                
+
                 // Enable this lines for testing reactivity on frontend:
                 // try {
                 //     for (let i = 0; i < updatedData.stations.length; i++) {
