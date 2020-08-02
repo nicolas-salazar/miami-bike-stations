@@ -35,7 +35,7 @@ class SearchBox extends React.Component {
                         </div>
 
                         <SearchInput
-                            onBlur={() => { setTimeout(() => { this.setState({ dropdownIsOpen: false }); }, 100); }}
+                            onBlur={() => { setTimeout(() => { this.setState({ dropdownIsOpen: false }); }, 200); }}
                             onChange={(value) => { this.setState({ activeFilter: value, dropdownIsOpen: true }); }}
                             onFocus={() => { this.setState({ dropdownIsOpen: true }); }}
                             style={{ ...inputStyle }}

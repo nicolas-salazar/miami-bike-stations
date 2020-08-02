@@ -5,14 +5,18 @@ export const cardStyle = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    width: 392,
+    maxWidth: 385,
+    width: '100%',
 };
 
 export const containerStyle = {
+    display: 'flex',
+    justifyContent: 'flex-end',
     padding: 8,
     position: 'absolute',
     right: 0,
     top: 0,
+    width: '100%',
 };
 
 export const iconContainerStyle = {

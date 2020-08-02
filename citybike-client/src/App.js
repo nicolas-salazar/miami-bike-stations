@@ -21,7 +21,6 @@ class App extends React.Component {
     render() {
         return (
             <React.Fragment>
-
                 <BikesMap
                     center={this.state.mapCenter}
                     zoom={this.state.mapZoom} />
@@ -36,7 +35,7 @@ class App extends React.Component {
 
     // functionalities
     focusOnStation = (station) => {
-        // console.log(station);
+        console.log(station);
         this.setState({
             mapCenter: { lat: station.latitude, lng: station.longitude, },
             mapZoom: 18
