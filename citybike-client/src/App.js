@@ -14,7 +14,7 @@ class App extends React.Component {
 
         this.state = {
             mapCenter: { lat: 25.790654, lng: -80.1300455, },
-            mapZoom: 11,
+            mapZoom: 15,
         }
     }
 
@@ -23,12 +23,12 @@ class App extends React.Component {
             <React.Fragment>
                 <BikesMap
                     center={this.state.mapCenter}
+                    stations={exampleNetwork.stations}
                     zoom={this.state.mapZoom} />
 
                 <SearchBox
                     focusOnStation={this.focusOnStation}
-                    stations={exampleNetwork.stations}
-                />
+                    stations={exampleNetwork.stations} />
             </React.Fragment>
         );
     }
@@ -38,7 +38,7 @@ class App extends React.Component {
         console.log(station);
         this.setState({
             mapCenter: { lat: station.latitude, lng: station.longitude, },
-            mapZoom: 18
+            mapZoom: 19
         });
     }
 }

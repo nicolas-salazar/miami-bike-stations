@@ -17,6 +17,7 @@ export const containerStyle = {
     right: 0,
     top: 0,
     width: '100%',
+    zIndex: 1,
 };
 
 export const iconContainerStyle = {

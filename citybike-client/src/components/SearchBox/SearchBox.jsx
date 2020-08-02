@@ -11,7 +11,7 @@ import { GiBroom } from 'react-icons/gi';
 import { SearchResults } from './SearchResults';
 
 // Custom styles:
-import { baseBorder, cardStyle, containerStyle, iconContainerStyle, iconStyle, inputContainerStyle, inputStyle, resultsContainer } from './Styles';
+import { baseBorder, cardStyle, containerStyle, iconContainerStyle, iconStyle, inputContainerStyle, inputStyle, resultsContainer } from './styles';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 
 class SearchBox extends React.Component {

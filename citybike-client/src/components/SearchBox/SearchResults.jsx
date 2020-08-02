@@ -5,7 +5,7 @@ import { GrBike } from 'react-icons/gr';
 import { MdDoNotDisturbOff } from 'react-icons/md';
 
 // Custom styles:
-import { iconContainerStyle, iconStyle, SearchResultContainer } from './Styles';
+import { iconContainerStyle, iconStyle, SearchResultContainer } from './styles';
 
 export const SearchResults = (props) => {
 
