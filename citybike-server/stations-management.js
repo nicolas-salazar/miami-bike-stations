@@ -1,5 +1,5 @@
 // Main config for bike api fetching:
-const apiFetchInterval = 5000;
+const apiFetchInterval = 15000;
 const citybikeEndpoint = "http://api.citybik.es/v2/networks/";
 
 // Fetch utils:
@@ -16,6 +16,7 @@ class BikeStationsNetwork {
 
     fetchNetworkData = () => {
         return new Promise((resolve, reject) => {
+            console.log('Fetching data');
             fetch(citybikeEndpoint + this.id)
                 .then(apiResponse => {
                     if (apiResponse.status === 200) {
@@ -36,9 +37,20 @@ class BikeStationsNetwork {
     checkForUpdates = (callback) => {
         this.fetchNetworkData()
             .then(newNetworkData => {
-                if (JSON.stringify(newNetworkData) !== JSON.stringify(this.networkData)) {
-                    callback(newNetworkData);
-                    this.networkData = newNetworkData;
+                
+                let updatedData = { ...newNetworkData };
+                
+                // Enable this lines for testing reactivity on frontend:
+                // try {
+                //     for (let i = 0; i < updatedData.stations.length; i++) {
+                //         updatedData.stations[i].free_bikes = updatedData.stations[i].free_bikes + 5;
+                //     }
+                // }
+                // catch (error) { }
+
+                if (JSON.stringify(updatedData) !== JSON.stringify(this.networkData)) {
+                    callback(updatedData);
+                    this.networkData = updatedData;
                 }
             })
             .catch(error => { console.log(error); });
