@@ -10,7 +10,7 @@ import exampleNetwork from './utils/exampleData';
 import TimeFilter from './components/TimeFilter/TimeFilter';
 
 // Development helpers:
-const allowFetchingData = false;
+const allowFetchingData = true;
 
 class App extends React.Component {
 
