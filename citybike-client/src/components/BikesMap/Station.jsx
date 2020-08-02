@@ -23,7 +23,7 @@ class Station extends React.Component {
     }
 
     render() {
-        const iconMarkup = renderToStaticMarkup(<i className="fa fa-bicycle fa-2x" style={{ color: this.getColorBasedOnAvailability() }} />);
+        const iconMarkup = renderToStaticMarkup(<i className='fa fa-bicycle fa-2x' style={{ color: this.getColorBasedOnAvailability() }} />);
         const customMarkerIcon = divIcon({ html: iconMarkup, className: 'marker-on-divicon' });
 
         return (
@@ -32,14 +32,18 @@ class Station extends React.Component {
                 position={{ lat: this.props.item.latitude, lng: this.props.item.longitude }}
             >
                 <Popup>
+                    <span
+                        className='text small' style={{ textDecoration: 'underline' }}
+                        dangerouslySetInnerHTML={{ __html: '<b>' + this.props.item.extra.address + '</b> says:' }} />
+
                     <p
-                        class="text small"
+                        className='text small'
                         dangerouslySetInnerHTML={{ __html: this.getMessageBasedOnAvailability() }}
-                        style={{ ...availabilityText }} />
+                        style={{ ...availabilityText, marginTop: 5, marginLeft: 10 }} />
 
                     <span
-                        className="muted-text small"
-                        dangerouslySetInnerHTML={{ __html: "Last update: <b>Today, 14:50</b>" }} />
+                        className='muted-text small'
+                        dangerouslySetInnerHTML={{ __html: 'Last update: <b>Today, ' + this.getTimeStamp() + '</b>' }} />
 
                 </Popup>
             </Marker>
@@ -60,25 +64,30 @@ class Station extends React.Component {
 
     getMessageBasedOnAvailability = () => {
         if (this.props.item.free_bikes === 0) {
-            return "<b>No more bikes</b> available. We are so sorry 🤧";
+            return '<b>No more bikes</b> available. We are so sorry 🤧';
         }
 
         if (this.props.item.free_bikes < 5) {
             let message = getRandomItem(notManyBikesMessages);
-            message =  message.replace('@total', this.props.item.free_bikes);
+            message = message.replace('@total', this.props.item.free_bikes);
             if (this.props.item.free_bikes === 1) { message = message.replace('bikes', 'bike'); };
-            
+
             return message;
         }
 
         if (this.props.item.free_bikes === 5) {
             let message = getRandomItem(enoughBikesMessages);
-            return  message.replace('@total', this.props.item.free_bikes);        
+            return message.replace('@total', this.props.item.free_bikes);
         }
 
 
         let message = getRandomItem(fiveBikesMessages);
         return message.replace('@total', this.props.item.free_bikes);
+    }
+
+    getTimeStamp = () => {
+        const date = new Date(this.props.item.timestamp);
+        return date.getHours() + ':' + date.getMinutes();
     }
 }
 
