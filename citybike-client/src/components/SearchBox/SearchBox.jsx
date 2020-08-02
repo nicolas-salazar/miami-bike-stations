@@ -51,12 +51,14 @@ class SearchBox extends React.Component {
                     </div>
 
                     <PerfectScrollbar style={{ ...resultsContainer, display: ((this.state.activeFilter !== '' && this.state.dropdownIsOpen) ? 'flex' : 'none') }}>
-                        {(this.state.activeFilter !== '' && this.state.dropdownIsOpen) ?
-                            <SearchResults
-                                filter={this.state.activeFilter}
-                                focusOnStation={this.props.focusOnStation}
-                                items={this.props.stations} /> :
-                            <React.Fragment />}
+                        {
+                            (this.state.activeFilter !== '' && this.state.dropdownIsOpen) ?
+                                <SearchResults
+                                    filter={this.state.activeFilter}
+                                    focusOnStation={this.props.focusOnStation}
+                                    items={this.props.stations} /> :
+                                <React.Fragment />
+                        }
                     </PerfectScrollbar>
                 </Card>
             </div>

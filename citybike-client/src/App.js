@@ -7,6 +7,7 @@ import SearchBox from './components/SearchBox/SearchBox';
 
 // Example data:
 import exampleNetwork from './utils/exampleData';
+import TimeFilter from './components/TimeFilter/TimeFilter';
 
 // Development helpers:
 const allowFetchingData = false;
@@ -40,6 +41,10 @@ class App extends React.Component {
                     <SearchBox
                         focusOnStation={this.focusOnStation}
                         stations={this.state.network.stations} />
+
+                    <TimeFilter
+                        showBefore={this.state.showBefore}
+                        updateShowBefore={(newDate) => { this.setState({ showBefore: newDate }); }} />
                 </React.Fragment>
             );
         }
